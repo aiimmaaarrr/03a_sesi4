@@ -24,40 +24,50 @@ class MatakuliahController extends Controller
             'kode_mk' => 'required|unique:matakuliahs,kode_mk',
             'nama_mk' => 'required',
             'sks'     => 'required|integer',
-            'semester'=> 'required|integer',
         ]);
 
         Matakuliah::create($request->all());
 
         return redirect()->route('matakuliah.index')
-                         ->with('success', 'Mata Kuliah berhasil ditambahkan');
+                        ->with('success', 'Mata Kuliah berhasil ditambahkan');
     }
 
-    public function edit($kode_mk)
+    /**
+     * TUGAS MANDIRI NOMOR 2: Menampilkan mahasiswa per mata kuliah
+     */
+    public function show($id)
     {
-        $matakuliah = Matakuliah::findOrFail($kode_mk);
+        // Mengambil satu data mata kuliah beserta relasi mahasiswas-nya
+        $matakuliah = Matakuliah::with('mahasiswas')->findOrFail($id);
+        
+        return view('matakuliah.show', compact('matakuliah'));
+    }
+
+    public function edit($id)
+    {
+        $matakuliah = Matakuliah::findOrFail($id);
         return view('matakuliah.edit', compact('matakuliah'));
     }
 
-    public function update(Request $request, $kode_mk)
+    public function update(Request $request, $id)
     {
         $request->validate([
+            'kode_mk' => 'required|unique:matakuliahs,kode_mk,' . $id,
             'nama_mk' => 'required',
             'sks'     => 'required|integer',
-            'semester'=> 'required|integer',
         ]);
 
-        $matakuliah = Matakuliah::findOrFail($kode_mk);
-        $matakuliah->update($request->all());
+        $mk = Matakuliah::findOrFail($id);
+        $mk->update($request->all());
 
         return redirect()->route('matakuliah.index')
-                         ->with('success', 'Mata Kuliah berhasil diperbarui');
+                        ->with('success', 'Mata Kuliah berhasil diperbarui');
     }
 
-    public function destroy($kode_mk)
+    public function destroy($id)
     {
-        Matakuliah::destroy($kode_mk);
+        Matakuliah::destroy($id);
         return redirect()->route('matakuliah.index')
-                         ->with('success', 'Mata Kuliah berhasil dihapus');
+                        ->with('success', 'Mata Kuliah berhasil dihapus');
     }
 }

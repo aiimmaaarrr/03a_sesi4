@@ -9,7 +9,10 @@
 <body class="container mt-5">
     <div class="d-flex justify-content-between mb-3">
         <h2>Daftar Mahasiswa</h2>
-        <a href="{{ route('mahasiswa.create') }}" class="btn btn-primary">Tambah Mahasiswa</a>
+        <div>
+            <a href="{{ route('matakuliah.index') }}" class="btn btn-outline-secondary">Kelola Mata Kuliah</a>
+            <a href="{{ route('mahasiswa.create') }}" class="btn btn-primary">Tambah Mahasiswa</a>
+        </div>
     </div>
 
     @if(session('success'))
@@ -35,7 +38,9 @@
                 <td>{{ $m->nim }}</td>
                 <td>{{ $m->nama }}</td>
                 <td>{{ $m->kelas }}</td>
-                <td>{{ $m->matakuliah }}</td>
+                
+                <td>{{ $m->matakuliah->nama_mk ?? 'Belum Pilih MK' }}</td>
+                
                 <td>
                     <a href="{{ route('mahasiswa.edit', $m->nim) }}" class="btn btn-sm btn-warning">Edit</a>
                     

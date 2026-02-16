@@ -21,7 +21,8 @@ class MahasiswaController extends Controller
      */
     public function create()
     {
-        return view('mahasiswa.create');
+        $data_mk = \App\Models\Matakuliah::all();
+    return view('mahasiswa.create', compact('data_mk'));
     }
 
     /**
@@ -34,10 +35,10 @@ class MahasiswaController extends Controller
             'nim' => 'required|unique:mahasiswas,nim', 
             'nama' => 'required', 
             'kelas' => 'required', 
-            'matakuliah' => 'required' 
+            'matakuliah_id' => 'required|exists:matakuliahs,id'
         ]); 
 
-        Mahasiswa::create($request->all()); 
+        \App\Models\Mahasiswa::create($request->all());
 
         return redirect()->route('mahasiswa.index')
                         ->with('success', 'Data mahasiswa berhasil ditambahkan'); 
